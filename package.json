@@ -10,6 +10,7 @@
   "main": "main.js",
   "scripts": {
     "start": "npm run build && node ./dist/main.js",
+    "start:dev": "npm run ts ./src/main.ts | pino-pretty --colorize --translateTime SYS:standard",
     "build": "npm run clean && npm run compile",
     "lint": "eslint src/ --ext .ts",
     "lint:fix": "eslint src/ --ext .ts --fix",
@@ -17,9 +18,12 @@
     "clean": "rimraf dist",
     "ts": "ts-node",
     "cli": "node ./dist/cli.js",
+    "cli:dev": "ts-node ./src/cli.ts",
     "mock:server": "json-server ./mocks/mock-server-data.json --port 3004"
   },
   "devDependencies": {
+    "@types/convict": "^6.1.1",
+    "@types/convict-format-with-validator": "^6.0.2",
     "@types/node": "^16.11.26",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
@@ -37,8 +41,11 @@
     "npm": "^8.1.0"
   },
   "dependencies": {
+    "convict": "^6.2.2",
+    "convict-format-with-validator": "^6.2.0",
     "chalk": "5.0.1",
     "dayjs": "^1.11.1",
+    "dotenv": "16.0.0",
     "got": "^12.0.3",
     "pino": "^7.10.0"
   }
