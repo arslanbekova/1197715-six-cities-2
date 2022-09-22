@@ -4,7 +4,7 @@ import { Accomodation, City, Facility } from './consts.js';
 export const createOffer = (row: string): Offer => {
   const tokens = row.replace('\n', '').split('\t');
   const [title, description, publishedDate, city, previewImg, photos, isPremium, rating, type, roomsCount, guestsCount, price, facilities, name, email, avatarPath, password, isPro, commentsCount, latitude, longitude] = tokens;
-  console.log(type);
+
   return {
     title,
     description,
