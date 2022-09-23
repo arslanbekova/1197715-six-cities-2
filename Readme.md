@@ -1,7 +1,7 @@
 # Личный проект «Шесть городов»
 
-* Студент: [Людмила Арсланбекова](https://up.htmlacademy.ru/nodejs-api/2/user/1197715).
-* Наставник: `Неизвестно`.
+- Студент: [Людмила Арсланбекова](https://up.htmlacademy.ru/nodejs-api/2/user/1197715).
+- Наставник: `Семён Якушев`.
 
 ---
 
@@ -47,3 +47,9 @@ git clone SSH-адрес_вашего_форка
 <a href="https://htmlacademy.ru/profession/fullstack"><img align="left" width="50" height="50" title="HTML Academy" src="https://up.htmlacademy.ru/static/img/intensive/nodejs/logo-for-github-2.png"></a>
 
 Репозиторий создан для обучения на профессиональном онлайн‑курсе «[Node.js. Профессиональная разработка REST API](https://htmlacademy.ru/profession/fullstack)» от [HTML Academy](https://htmlacademy.ru).
+
+### 5. Переменные окружения:
+
+PORT=5000 - порт для подключения к приложению;
+SALT -случайный набор символов для хеширования пароля
+DB_HOST - IP-адрес сервера баз данных
