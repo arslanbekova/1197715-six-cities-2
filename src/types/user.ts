@@ -3,5 +3,5 @@ export type User = {
   email: string;
   avatar?: string;
   password: string;
-  isPro: boolean; // check me
+  isPro: string; // check me
 }

@@ -22,7 +22,7 @@ export const createOffer = (row: string): Offer => {
     price: Number.parseInt(price, 10),
     facilities: facilities.split(';')
       .map((facility) => Facility[facility as keyof typeof Facility]),
-    author: {name, email, avatar: avatarPath, password, isPro: isPro === 'true'},
+    author: {name, email, avatar: avatarPath, password, isPro: isPro},
     commentsCount: Number.parseInt(commentsCount, 10),
     coordinates: {latitude: Number(latitude), longitude: Number(longitude)}
   };
