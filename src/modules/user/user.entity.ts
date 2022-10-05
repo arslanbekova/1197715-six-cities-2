@@ -14,12 +14,12 @@ export interface UserEntity extends defaultClasses.Base {}
 export class UserEntity extends defaultClasses.TimeStamps implements User {
   constructor(data: User) {
     super();
-
     this.email = data.email;
     this.avatar = data.avatar;
     this.name = data.name;
     this.isPro = data.isPro;
   }
+
   @prop({ required: true, minlength: 1, maxlength: 15, default: '' })
   public name!: string;
 
