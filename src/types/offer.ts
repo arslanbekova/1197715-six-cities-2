@@ -1,21 +1,22 @@
 import { User } from './user.js';
-import { Accomodation, City, Facility } from '../utils/consts.js';
+import { Accomodation, City, Facility, OfferType } from '../utils/consts.js';
 import { Coordinates } from './coorditates.js';
+import { ValueOf } from './common.js';
 
 export type Offer = {
   title: string;
   description: string;
   publishedDate: Date;
-  city: City;
+  city: ValueOf<City>;
   previewImg: string;
   photos: string[];
-  isPremium: boolean;
+  offerType: ValueOf<OfferType>;
   rating: number;
-  type: Accomodation;
+  type: ValueOf<Accomodation>;
   roomsCount: number;
   guestsCount: number;
   price: number;
-  facilities: Facility[];
+  facilities: ValueOf<Facility>[];
   author: User;
   commentsCount: number;
   coordinates: Coordinates;

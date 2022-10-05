@@ -1,28 +1,51 @@
 import crypto from 'crypto';
 import { Offer } from '../types/offer.js';
-import { Accomodation, City, Facility } from './consts.js';
+import { Accomodation, City, Facility, OfferType } from './consts.js';
+import { ValueOf } from '../types/common.js';
 
 export const createOffer = (row: string): Offer => {
   const tokens = row.replace('\n', '').split('\t');
-  const [title, description, publishedDate, city, previewImg, photos, isPremium, rating, type, roomsCount, guestsCount, price, facilities, name, email, avatarPath, password, isPro, commentsCount, latitude, longitude] = tokens;
+  const [
+    title,
+    description,
+    publishedDate,
+    city,
+    previewImg,
+    photos,
+    offerType,
+    rating,
+    type,
+    roomsCount,
+    guestsCount,
+    price,
+    facilities,
+    name,
+    email,
+    avatarPath,
+    password,
+    userType,
+    commentsCount,
+    latitude,
+    longitude
+  ] = tokens;
 
   return {
     title,
     description,
     publishedDate: new Date(publishedDate),
-    city: City[city as keyof typeof City],
+    city: city as ValueOf<City>,
     previewImg,
     photos: photos.split(';')
       .map((photo) => photo),
-    isPremium: isPremium === 'true',
+    offerType: offerType as ValueOf<OfferType>,
     rating: Number.parseInt(rating, 10),
-    type: Accomodation[type as keyof typeof Accomodation],
+    type: type as ValueOf<Accomodation>,
     roomsCount: Number.parseInt(roomsCount, 10),
     guestsCount: Number.parseInt(guestsCount, 10),
     price: Number.parseInt(price, 10),
     facilities: facilities.split(';')
-      .map((facility) => Facility[facility as keyof typeof Facility]),
-    author: {name, email, avatar: avatarPath, password, isPro: isPro},
+      .map((facility) => facility as ValueOf<Facility>),
+    author: {name, email, avatar: avatarPath, password, userType},
     commentsCount: Number.parseInt(commentsCount, 10),
     coordinates: {latitude: Number(latitude), longitude: Number(longitude)}
   };

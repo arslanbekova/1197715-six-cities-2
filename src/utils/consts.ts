@@ -51,9 +51,32 @@ export enum City {
   Dusseldorf = 'Dusseldorf',
 }
 
-export enum PremiumType {
+export enum OfferType {
   Pro = 'pro',
   Basic = 'basic'
+}
+
+export enum UserType {
+  Pro = 'pro',
+  Basic = 'basic'
+}
+
+export enum Rating {
+  Min = 1,
+  Max = 5,
+  NumAfterDigit = 1,
+}
+export enum Room {
+  MinCount = 1,
+  MaxCount = 8,
+}
+export enum Guest {
+  MinCount = 1,
+  MaxCount = 10,
+}
+export enum Price {
+  Min = 100,
+  Max = 100000,
 }
 
 export const Component = {

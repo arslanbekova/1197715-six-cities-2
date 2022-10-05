@@ -1,10 +1,28 @@
 import typegoose, { defaultClasses, getModelForClass, Ref } from '@typegoose/typegoose';
 import { UserEntity } from '../user/user.entity.js';
-import { City, Accomodation, Facility, PremiumType } from '../../utils/consts.js';
+import { City, Accomodation, Facility, OfferType, Rating, Room, Guest, Price } from '../../utils/consts.js';
 
-const {prop, modelOptions} = typegoose;
+enum OfferTitle {
+  minlength = 10,
+  maxlength = 100,
+}
+
+enum OfferDescription {
+  minlength = 20,
+  maxlength = 1024,
+}
+
+const { prop, modelOptions } = typegoose;
 
 export interface OfferEntity extends defaultClasses.Base {}
+
+class Coordinates {
+  @prop()
+  public latitude!: number;
+
+  @prop()
+  public longitude!: number;
+}
 
 @modelOptions({
   schemaOptions: {
@@ -12,10 +30,10 @@ export interface OfferEntity extends defaultClasses.Base {}
   }
 })
 export class OfferEntity extends defaultClasses.TimeStamps {
-  @prop({ required: true, minlength: 10, maxlength: 100, trim: true })
+  @prop({ required: true, minlength: OfferTitle.minlength, maxlength: OfferTitle.maxlength, trim: true })
   public title!: string;
 
-  @prop({ required: true, minlength: 20, maxlength: 1024, trim: true })
+  @prop({ required: true, minlength: OfferDescription.minlength, maxlength: OfferDescription.maxlength, trim: true })
   public description!: string;
 
   @prop({ required: true })
@@ -38,23 +56,23 @@ export class OfferEntity extends defaultClasses.TimeStamps {
       validator: (v: string[]) => v.length === 6,
       message: 'There should always be 6 photos!'
     }
-  }) // how to limit it
+  }) // how to limit array itmes?
   public photos!: string[];
 
   @prop({
     required: true,
     type: () => String,
-    enum: PremiumType
+    enum: OfferType
   })
-  public isPremium!: PremiumType;
+  public offerType!: OfferType;
 
   @prop({
     required: true,
     type: () => Number,
-    min: 1,
-    max: 5
+    min: Rating.Min,
+    max: Rating.Max
   })
-  public rating!: number; // how to type float numbers
+  public rating!: number; // how to type float numbers?
 
   @prop({
     required: true,
@@ -66,24 +84,24 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   @prop({
     required: true,
     type: () => Number,
-    min: 1,
-    max: 8
+    min: Room.MinCount,
+    max: Room.MaxCount
   })
   public roomsCount!: number;
 
   @prop({
     required: true,
     type: () => Number,
-    min: 1,
-    max: 10
+    min: Guest.MinCount,
+    max: Guest.MaxCount
   })
   public guestsCount!: number;
 
   @prop({
     required: true,
     type: () => Number,
-    min: 100,
-    max: 100000
+    min: Price.Min,
+    max: Price.Max
   })
   public price!: number;
 
@@ -98,16 +116,15 @@ export class OfferEntity extends defaultClasses.TimeStamps {
     ref: UserEntity,
     required: true,
   })
-  public userId!: Ref<UserEntity>;
+  public authorId!: Ref<UserEntity>;
 
   @prop({default: 0})
   public commentsCount!: number;
 
   @prop({
-    required: true,
-    type: () => [Number] // how to type float number?
+    required: true
   })
-  public coordinates!: number[]; // should I create another collection for coords?
+  public coordinates!: Coordinates; // should I create another collection/model for coords to use it like Ref?
 }
 
 export const OfferModel = getModelForClass(OfferEntity);

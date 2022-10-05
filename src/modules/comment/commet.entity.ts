@@ -1,7 +1,13 @@
 import typegoose, { defaultClasses, getModelForClass, Ref } from '@typegoose/typegoose';
 import { UserEntity } from '../user/user.entity.js';
+import { Rating } from '../../utils/consts.js';
 
-const {prop, modelOptions} = typegoose;
+enum Comment {
+  MinLength = 1,
+  MaxLegtn = 1024,
+}
+
+const { prop, modelOptions } = typegoose;
 
 export interface CommentEntity extends defaultClasses.Base {}
 
@@ -11,7 +17,7 @@ export interface CommentEntity extends defaultClasses.Base {}
   }
 })
 export class CommentEntity extends defaultClasses.TimeStamps {
-  @prop({ required: true, minlength: 5, maxlength: 1024, trim: true })
+  @prop({ required: true, minlength: Comment.MinLength, maxlength: Comment.MaxLegtn, trim: true })
   public text!: string;
 
   @prop({ required: true })
@@ -20,16 +26,16 @@ export class CommentEntity extends defaultClasses.TimeStamps {
   @prop({
     required: true,
     type: () => Number,
-    min: 1,
-    max: 5
+    min: Rating.Min,
+    max: Rating.Max
   })
-  public rating!: number; // how to type float numbers
+  public rating!: number; // how to type float numbers?
 
   @prop({
     ref: UserEntity,
     required: true,
   })
-  public userId!: Ref<UserEntity>;
+  public authorId!: Ref<UserEntity>;
 }
 
 export const OfferModel = getModelForClass(CommentEntity);
