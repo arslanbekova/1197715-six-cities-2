@@ -51,8 +51,41 @@ export enum City {
   Dusseldorf = 'Dusseldorf',
 }
 
+export enum OfferType {
+  Pro = 'pro',
+  Basic = 'basic'
+}
+
+export enum UserType {
+  Pro = 'pro',
+  Basic = 'basic'
+}
+
+export enum Rating {
+  Min = 1,
+  Max = 5,
+  NumAfterDigit = 1,
+}
+export enum Room {
+  MinCount = 1,
+  MaxCount = 8,
+}
+export enum Guest {
+  MinCount = 1,
+  MaxCount = 10,
+}
+export enum Price {
+  Min = 100,
+  Max = 100000,
+}
+
 export const Component = {
   Application: Symbol.for('Application'),
   LoggerInterface: Symbol.for('LoggerInterface'),
   ConfigInterface: Symbol.for('ConfigInterface'),
+  DatabaseInterface: Symbol.for('DatabaseInterface'),
+  UserServiceInterface: Symbol.for('UserServiceInterface'),
+  UserModel: Symbol.for('UserModel'),
+  OfferServiceInterface: Symbol.for('OfferServiceInterface'),
+  OfferModel: Symbol.for('OfferModel')
 } as const;

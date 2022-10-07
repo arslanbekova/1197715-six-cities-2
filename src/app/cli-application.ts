@@ -43,5 +43,4 @@ export default class CLIApplication {
     const commandArguments = parsedCommand[commandName] ?? [];
     command.execute(...commandArguments);
   }
-
 }
