@@ -123,35 +123,6 @@ paths:
         "200":
           description: Information about log out status.
 
-  /users/{userId}/avatar:
-    patch:
-      tags:
-        - users
-      summary: Upload user's avatar
-      description: Uploads user's avatar. Picture
-        must be in `png` or `jpg` format.
-
-      requestBody:
-        description: User avatar image.
-        content:
-          image/jpg, image/png:
-            schema:
-              type: string
-              contentMediaType: image/png, image/jpg
-              contentEncoding: base64
-        required: true
-
-      responses:
-        "200":
-          description: Information about uploading user avatar.
-
-        "400":
-          description: Some another error due to an apparent client error.
-        "413":
-          description: Image is too large.
-        "415":
-          description: Server or resource does not support uploaded format.
-
   /comments:
     get:
       tags:
