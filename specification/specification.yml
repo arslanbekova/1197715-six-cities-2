@@ -1,0 +1,741 @@
+openapi: 3.1.0
+info:
+  title: API server for «Six cities» project.
+  description: |-
+    * The list of resources and routes «Six cities» server.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 1.0.0
+tags:
+  - name: offers
+    description: Actions with offers.
+  - name: comments
+    description: Actions with comments.
+  - name: users
+    description: Actions with user.
+  - name: favorites
+    description: Actions with favorite offers.
+
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Register user
+      description: Register a new user.
+
+      requestBody:
+        description: Information for creating a new user.
+        content:
+          application/json:
+            schema: {
+              type: object,
+              properties: {
+                email: {
+                  type: string
+                },
+                password: {
+                  type: string
+                }
+              }
+            }
+            examples:
+              email:
+                value: keks@htmlacademy.ru
+              password:
+                value: 123456
+        required: true
+
+      responses:
+        "201":
+          description: User is registered. User entity.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "409":
+          description: User with that email already existed.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Authorizes user
+      description: Authorizes a user based on login and password.
+
+      requestBody:
+        description: Information for user login.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses:
+        "200":
+          description: User is logged in.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "400":
+          description: Login or password is not correct.
+
+    get:
+      tags:
+        - users
+      summary: Checking user status
+      description: Returs information about user status.
+
+      requestBody:
+        description: Information for checking user status.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        required: true
+
+      responses:
+        "200":
+          description: information about user status.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "400":
+          description: Email or userId is not correct.
+
+        "401":
+          description: User is unauthorised.
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Log out user
+      description: Allows user to exit from the closed part of the application.
+
+      responses:
+        "200":
+          description: Information about log out status.
+
+  /users/{userId}/avatar:
+    patch:
+      tags:
+        - users
+      summary: Upload user's avatar
+      description: Uploads user's avatar. Picture
+        must be in `png` or `jpg` format.
+
+      requestBody:
+        description: User avatar image.
+        content:
+          image/jpg, image/png:
+            schema:
+              type: string
+              contentMediaType: image/png, image/jpg
+              contentEncoding: base64
+        required: true
+
+      responses:
+        "200":
+          description: Information about uploading user avatar.
+
+        "400":
+          description: Some another error due to an apparent client error.
+        "413":
+          description: Image is too large.
+        "415":
+          description: Server or resource does not support uploaded format.
+
+  /comments:
+    get:
+      tags:
+        - comments
+      summary: Getting comments list by offerId
+      description: Returns comments list for specific offer.
+
+      responses:
+        "200":
+          description: Comments list for specific offer.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/comment'
+
+        "400":
+          description: OfferId is not correct.
+
+    post:
+      tags:
+        - comments
+      summary: Create new comment
+      description: Create new comment for specific offer.
+
+      requestBody:
+        description: Information for creating a new comment.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createComment'
+        required: true
+
+      responses:
+        "201":
+          description: Comment was added successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comment'
+
+          "400":
+            description: Some mistake in transferred data.
+
+  /offers:
+    get:
+      tags:
+        - offers
+      summary: Getting offers list
+      description: Returns all offers list.
+
+      responses:
+        "200":
+          description: List of all offers.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                 $ref: '#/components/schemas/offer'
+        "204":
+          description: The server successfully processed the request, and is not returning any content.
+
+        default:
+          description: Error appears during getting offers
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+    post:
+      tags:
+        - offers
+      summary: Create new offer
+      description: Create new offer.
+
+      requestBody:
+        description: Information for creating a new offer.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+        required: true
+
+      responses:
+        "201":
+          description: Offer was created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+          "400":
+            description: Some mistake in transferred data.
+
+  /offers/{offerId}:
+    get:
+      tags:
+        - offers
+      summary: Getting offer by offerId
+      description: Returns detailed offer.
+
+      responses:
+        "200":
+          description: Detailed offer.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        "400":
+          description: OfferId is not correct.
+
+    put:
+      tags:
+        - offers
+      summary: Edit offer
+      description: Edit specific offer.
+
+      requestBody:
+        description: Information for editing offer.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offer'
+        required: true
+
+      responses:
+        "200":
+          description: Offer was updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offer'
+
+        "400":
+          description: Some mistake in transferred data.
+
+    delete:
+      tags:
+        - offers
+      summary: Delete offer
+      description: Delete specific offer.
+
+      responses:
+        "204":
+          description: Offer was deleted successfully.
+
+        "400":
+          description: Some mistake in transferred data.
+
+  /offers/{city}/premium:
+    get:
+      tags:
+        - offers
+      summary: Getting premium offers
+      description: Returns premium offers for specific city.
+
+      responses:
+        "200":
+          description: Premium offers for the city.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/offer'
+
+        default:
+          description: Error appears during getting offers
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /favorites/{userId}:
+    get:
+      tags:
+        - favorites
+      summary: Getting favorite offers list
+      description: Returns favorite offers list for user.
+
+      responses:
+        "200":
+          description: Favorite offers list.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/favoriteOffer'
+        "204":
+          description: The server successfully processed the request, and is not returning any content.
+
+        default:
+          description: Error appears during getting offers
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+  /favorites/{userId}/{offerId}:
+    post:
+      tags:
+        - favorites
+      summary: Adding offer to user's favorite list.
+      description: Add offer to user's favorite list.
+
+      responses:
+        "201":
+          description: Offer was added to user's favorite list successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/favoriteOffer'
+
+        default:
+          description: Error appears during getting offers
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+    delete:
+      tags:
+        - favorites
+      summary: Removing offer to user's favorite list.
+      description: Removes offer to user's favorite list.
+
+      responses:
+        "204":
+          description: Offer was removed to user's favorite list successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/favoriteOffer'
+
+        default:
+          description: Error appears during getting offers
+          content:
+            'text/html':
+              schema:
+                $ref: '#/components/schemas/errorModel'
+
+components:
+  schemas:
+    errorModel:
+      type: object
+      required:
+      - message
+      - code
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          minimum: 100
+          maximum: 600
+
+    createUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+        name:
+          type: string
+          example: Keks
+
+        password:
+          type: string
+          example: 123456
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+    userFull:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        name:
+          type: string
+          example: Monika
+
+        email:
+          type: string
+          example: monika@mail.com
+
+        avatar:
+          type: string ## example me
+
+        password:
+          type: string
+          example: qwe123
+
+        userType:
+          type: string
+          example: pro
+
+    comment:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        offerId:
+          type: string
+          example: 6329c3ddf04ab1061c6425ea
+
+        text:
+          type: string
+          example: beautifull apartment!
+
+        publishedDate:
+          type: Date
+          example: '2022-10-01T13:31:50.733Z'
+
+        rating:
+          type: number
+          example: 3
+
+        author:
+          $ref: '#/components/schemas/user'
+
+    createComment:
+      type: object
+
+      properties:
+        offerId:
+          type: string
+          example: 6329c3ddf04ab1061c6425ea
+
+        text:
+          type: string
+          example: beautifull apartment!
+
+        rating:
+          type: number
+          example: 3
+
+        author:
+          $ref: '#/components/schemas/user'
+
+    offer:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        title:
+          type: string
+          example: Cozy room
+
+        description:
+          type: string
+          example: Nice, cozy, warm place
+
+        publishedDate:
+          type: Date
+          example: '2022-10-01T13:31:50.733Z'
+
+        city:
+          type: string
+          example: Paris
+
+        previewImg:
+          type: string
+
+        photos:
+          type: array
+          items:
+            type: string
+
+        offerType:
+          type: string
+          example: premium
+
+        rating:
+          type: number
+          example: 5
+
+        type:
+          type: string
+          example: house
+
+        roomsCount:
+          type: number
+          example: 3
+
+        guestsCount:
+          type: number
+          example: 2
+
+        price:
+          type: number
+          example: 200
+
+        facilities:
+          type: array
+          items:
+            type: string
+          example: ['Washer', 'Towels', 'Fridge']
+
+        author:
+          $ref: '#/components/schemas/user'
+
+        commentsCount:
+          type: number
+          example: 10
+
+        coordinates:
+          type: object
+
+          properties:
+            latitude:
+              type: number
+              example: 48.85661
+
+            longitude:
+              type: number
+              example: 2.351499
+
+    createOffer:
+      type: object
+
+      properties:
+        title:
+          type: string
+          example: Cozy room
+
+        description:
+          type: string
+          example: Nice, cozy, warm place
+
+        city:
+          type: string
+          example: Paris
+
+        previewImg:
+          type: string
+
+        photos:
+          type: array
+          items:
+            type: string
+
+        type:
+          type: string
+          example: house
+
+        roomsCount:
+          type: number
+          example: 3
+
+        guestsCount:
+          type: number
+          example: 2
+
+        price:
+          type: number
+          example: 200
+
+        facilities:
+          type: array
+          items:
+            type: string
+          example: ['Washer', 'Towels', 'Fridge']
+
+        author:
+          $ref: '#/components/schemas/user'
+
+        coordinates:
+          type: object
+
+          properties:
+            latitude:
+              type: number
+              example: 48.85661
+
+            longitude:
+              type: number
+              example: 2.351499
+
+    favoriteOffer:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        title:
+          type: string
+          example: Cozy room
+
+        description:
+          type: string
+          example: Nice, cozy, warm place
+
+        publishedDate:
+          type: Date
+          example: '2022-10-01T13:31:50.733Z'
+
+        city:
+          type: string
+          example: Paris
+
+        previewImg:
+          type: string
+
+        photos:
+          type: array
+          items:
+            type: string
+
+        offerType:
+          type: string
+          example: premium
+
+        favoriteOffer:
+          type: string
+          example: Y
+
+        rating:
+          type: number
+          example: 5
+
+        type:
+          type: string
+          example: house
+
+        roomsCount:
+          type: number
+          example: 3
+
+        guestsCount:
+          type: number
+          example: 2
+
+        price:
+          type: number
+          example: 200
+
+        facilities:
+          type: array
+          items:
+            type: string
+          example: ['Washer', 'Towels', 'Fridge']
+
+        author:
+          $ref: '#/components/schemas/user'
+
+        commentsCount:
+          type: number
+          example: 10
+
+        coordinates:
+          type: object
+
+          properties:
+            latitude:
+              type: number
+              example: 48.85661
+
+            longitude:
+              type: number
+              example: 2.351499
